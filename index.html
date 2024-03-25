@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>강아지 가라사대</title>
+  <title>Cat jjal Maker</title>
 </head>
 <style>
   body {
@@ -31,7 +31,7 @@
   <div id="app"></div>
 
   <!-- React를 실행. -->
-  <!-- 주의: 사이트를 배포할 때는 "development.js"를 "production.min.js"로 대체하세요. -->
+  <!-- 주의: 사이트를 배포할 때는 "development.js"를 "production.min.js"로 대체 -->
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script> <!--리액트 코드가 들어가 있음-->
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
@@ -48,12 +48,12 @@
 
     const fetchCat = async (text) => {
       const OPEN_API_DOMAIN = "https://cataas.com";
-      const response = await fetch(`${OPEN_API_DOMAIN}/cat/says/${text}?json=true`);
+      const response = await fetch(
+        `${OPEN_API_DOMAIN}/cat/says/${text}?json=true`
+      );
       const responseJson = await response.json();
-      return `${OPEN_API_DOMAIN}/${responseJson.url}`;
+      return `${OPEN_API_DOMAIN}/cat/${responseJson._id}/says/${text}`;
     };
-
-    console.log("야옹");
 
     const Title = (props) => {
       return <h1>{props.children}</h1>;
@@ -62,7 +62,7 @@
 
     const Form = ({ updateMainCat }) => {
       const includesHangul = (text) => /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/i.test(text);
-      const [value, setValue] = React.useState(""); //input 값 
+      const [value, setValue] = React.useState(""); //input text 입력 값 
       const [errorMessage, setErrorMessage] = React.useState("");
 
       function handleInputChange(e) { //로그를 찍기 위함
@@ -94,8 +94,6 @@
       );
     };
 
-
-
     function CatItem(props) {
       return (
         <li>
@@ -126,10 +124,12 @@
     };
 
     const App = () => {
-
-      const CAT1 = "resources\\DOG1.jpg";
-      const CAT2 = "resources\\DOG2.jpg";
-      const CAT3 = "resources\\DOG3.jpg";
+      const CAT1 =
+        "https://cataas.com/cat/HSENVDU4ZMqy7KQ0/says/react";
+      const CAT2 =
+        "https://cataas.com/cat/BxqL2EjFmtxDkAm2/says/inflearn";
+      const CAT3 =
+        "https://cataas.com/cat/18MD6byVC1yKGpXp/says/JavaScript";
 
       //const [counter, setCounter] = React.useState(1); //초기값 1
       //const [counter, setCounter] = React.useState(jsonLocalStorage.getItem('counter')); //로컬스토리지 저장된 카운터 불러옴. 성능 최적화를 위해 아래처럼 변경함
@@ -141,15 +141,15 @@
       const [mainCat, setMainCat] = React.useState(CAT1);
       //const [favorites, setFavorites] = React.useState(jsonLocalStorage.getItem('favorites') || []); //state 추가. 성능 최적화를 위해 아래처럼 변경
       const [favorites, setFavorites] = React.useState(() => {
-        return jsonLocalStorage.getItem('favorites') || []
+        return jsonLocalStorage.getItem("favorites") || []
       })
 
       const alreadyFavorite = favorites.includes(mainCat);//
 
-      console.log("카운터", counter);
+      //console.log("카운터", counter);
 
       async function setInitialCat() {
-        const newCat = await fetchCat('First cat');
+        const newCat = await fetchCat("First cat");
         console.log(newCat)
         setMainCat(newCat);
       }
@@ -163,34 +163,29 @@
         //event.preventDefault(); //리프레시 막기 위함
 
         const newCat = await fetchCat(value);
-        console.log("폼 전송됨");
-
         setMainCat(newCat);
 
         //setCounter(nextCounter);
         setCounter((prev) => { //prev : 기존값 
           const nextCounter = prev + 1;
-          jsonLocalStorage.setItem('counter', nextCounter);
+          jsonLocalStorage.setItem("counter", nextCounter);
           return nextCounter; //생성버튼 연타했을 때 하나씩 올라가는게 보이도록
         })
-
       }
 
       function handleHeartClick() {
         const nextFavorites = [...favorites, mainCat];
-        console.log("하트 눌렀음");
+        //console.log("하트 눌렀음");
         setFavorites(nextFavorites) //favorites를 펼쳐서 쓴 다음, CAT3를 추가
-        jsonLocalStorage.setItem('favorites', nextFavorites)
+        jsonLocalStorage.setItem("favorites", nextFavorites)
       }
 
-      const counterTitle = counter === null ? "" : counter + '번째 ';
+      //const counterTitle = counter === null ? "" : counter + "번째 ";
+      const counterTitle = '';
 
       return ( //props로 넘길 땐 on~이라고 한다. 
-
         <div>
-          <Title>{counterTitle}강아지 가라사대</Title>
-
-
+          <Title>{counterTitle}Cat jjal maker</Title>
           <Form updateMainCat={updateMainCat} />
           <MainCard img={mainCat} onHeartClick={handleHeartClick} alreadyFavorite={alreadyFavorite} />
           <Favorites favorites={favorites} />
@@ -198,7 +193,7 @@
       );
     };
 
-    const 여기다가그려 = document.querySelector('#app');
+    const 여기다가그려 = document.querySelector("#app");
 
     //ReactDOM.render(catItem, 여기다가그려) //render = 그리다. catItem을 "여기다가그려"에다가 그려라 
     ReactDOM.createRoot(여기다가그려).render(<App />);
